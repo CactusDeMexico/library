@@ -1,5 +1,5 @@
 package com.pancarte.configuration;
-
+import com.pancarte.controlleur.LibraryController;
 import com.pancarte.proxy.MicroserviceLibraryProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,15 +27,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MicroserviceLibraryProxy Library;
+    public LibraryController Conf= new LibraryController();
 
 
 
-    private final String USERS_QUERY =Library.queryUser();
-    private final String ROLES_QUERY =  Library.queryRole();
+
+    //todo:connextion
+    //private final String USERS_QUERY =  Conf.UserSQL();
+
+    //private final String ROLES_QUERY = Conf.RoleSQL();
+
+   private final String USERS_QUERY = "select email, password, active from user_account where email=?";
+    private final String ROLES_QUERY = "select u.email, r.role from user_account u inner join user_role ur on (u.id_user = ur.id_user) inner join role r on (ur.id_role=r.id_role) where u.email=?";
+ // private final String USERS_QUERY = "";
+    //private final String ROLES_QUERY = "";
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        System.out.println(Library.queryRole());
+
         auth.jdbcAuthentication()
                 .usersByUsernameQuery(USERS_QUERY)
                 .authoritiesByUsernameQuery(ROLES_QUERY)
@@ -43,20 +52,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
 
-                .antMatchers("/search/").permitAll()
+                .antMatchers("/search/**").permitAll()
                 .antMatchers("/index").permitAll()
-
+                .antMatchers("/login").permitAll()
+                .antMatchers("/signup").permitAll()
                 .antMatchers("/test").anonymous()
+                .antMatchers("/borrow").hasAuthority("ADMIN")
+                .antMatchers("/borrowed").hasAuthority("ADMIN")
                 .antMatchers("/loggedhome").hasAuthority("ADMIN").anyRequest()
 
                 .authenticated().and().csrf().disable()
 
                 .formLogin().loginPage("/login").failureUrl("/login?error=true")
+                .defaultSuccessUrl("/index")
                 .defaultSuccessUrl("/loggedhome")
                 .usernameParameter("email")
                 .passwordParameter("password")
@@ -69,6 +83,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling().accessDeniedPage("/access_denied");
     }
 
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser(Conf.email).password(Conf.password);
+    }
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
