@@ -29,26 +29,6 @@ public class LibraryController {
 
 
 
-    //todo:emprunt livre
-    //
-    // todo:+ ralonge
-    //todo: loggedhomme
-
-    public String getRole() {
-        return role;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
 
     @Autowired
     private MicroserviceLibraryProxy Library;
@@ -59,23 +39,10 @@ public class LibraryController {
     public String role = "";
    public String password = "";
    public String email = "";
-    public String RoleSQL( ){
-        if(!this.email.equals("")){
-            return Library.queryRole(this.email);
-        }
-       return "";
 
-    }
-    public String UserSQL(){
-
-        if(!this.email.equals("")){
-            return Library.queryUser(this.email);
-        }
-        return "";
-    }
 
     @RequestMapping(value = {"/content"}, method = RequestMethod.GET)
-    public ModelAndView content(@RequestParam("idtopo") int idtopo) {
+    public ModelAndView content() {
         ModelAndView model = new ModelAndView();
         User user = new User();
         List<Book_List> book = new ArrayList<>();
@@ -289,7 +256,7 @@ public class LibraryController {
     }
     @RequestMapping(value = {"/borrow"}, method = RequestMethod.POST)
     public String  borrow(@RequestParam("idbook") int idBook) {
-        ModelAndView model = new ModelAndView();
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = Library.findUserByEmail(auth.getName());
         Library.borrow(idBook,user.getId());
@@ -299,8 +266,7 @@ public class LibraryController {
     }
  @RequestMapping(value = {"/borrowed"}, method = RequestMethod.POST)
     public String borrowed(@RequestParam("idborrow") int idBorrow) {
-        ModelAndView model = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         Library.extendBorrow(idBorrow);
      return "redirect:/loggedhome";
 

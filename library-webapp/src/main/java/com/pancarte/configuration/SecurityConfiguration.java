@@ -32,19 +32,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
 
-    //todo:connextion
-    //private final String USERS_QUERY =  Conf.UserSQL();
-
-    //private final String ROLES_QUERY = Conf.RoleSQL();
-
-   private final String USERS_QUERY = "select email, password, active from user_account where email=?";
-    private final String ROLES_QUERY = "select u.email, r.role from user_account u inner join user_role ur on (u.id_user = ur.id_user) inner join role r on (ur.id_role=r.id_role) where u.email=?";
- // private final String USERS_QUERY = "";
-    //private final String ROLES_QUERY = "";
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
+        String ROLES_QUERY = "select u.email, r.role from user_account u inner join user_role ur on (u.id_user = ur.id_user) inner join role r on (ur.id_role=r.id_role) where u.email=?";
+        String USERS_QUERY = "select email, password, active from user_account where email=?";
         auth.jdbcAuthentication()
                 .usersByUsernameQuery(USERS_QUERY)
                 .authoritiesByUsernameQuery(ROLES_QUERY)
