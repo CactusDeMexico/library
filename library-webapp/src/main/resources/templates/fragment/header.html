@@ -48,7 +48,7 @@
                 </ul>
                 <form class="form-inline my-2 my-lg-0" th:action="@{/search}" role="form" method="POST" >
 
-                    <a class="nav-link text-muted font-weight-bold" th:href="@{/loggedhome}"> -<span th:utext="${userName}"></span></a>
+                    <a class="nav-link text-muted font-weight-bold" th:href="@{/loggedhome}"> <span th:utext="${userName}"></span></a>
                     <a class="nav-link text-muted font-weight-bold" th:href="@{/logout}">Déconnexion </a>
                     <input class="form-control mr-sm-2" type="text" placeholder="Recherche" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Recherche</button>

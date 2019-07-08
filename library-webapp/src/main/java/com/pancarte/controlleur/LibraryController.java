@@ -1,5 +1,6 @@
 package com.pancarte.controlleur;
 
+import com.pancarte.Model.Book;
 import com.pancarte.Model.Book_List;
 import com.pancarte.Model.Borrow;
 import com.pancarte.Model.User;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class LibraryController {
     private MicroserviceLibraryProxy Library;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     public String user = "";
     public String role = "";
@@ -57,6 +61,7 @@ public class LibraryController {
         model.addObject("borrow", borrow);
         model.addObject("user", user);
         model.addObject("book", book);
+        model.addObject("now", Date.valueOf(LocalDate.now()));
         model.setViewName("fragment/content");
 
         return model;
@@ -71,11 +76,7 @@ public class LibraryController {
         return model;
     }
 
-    //@Scheduled(fixedRate = 5000)
-    @Scheduled(cron = "0/20 * * * * ?")
-    public void availableBook2() {
-        System.out.println("Yes REUSSI" );
-    }
+
     @RequestMapping(value = {"/index","/"}, method = RequestMethod.GET)
     public ModelAndView index() {
         ModelAndView model = new ModelAndView();
@@ -90,6 +91,7 @@ public class LibraryController {
         System.out.println(Library.test());
         List<Book_List> book;
         book = Library.getAllBooks();
+
 
         model.addObject("view", "home");
         model.addObject("book", book);
@@ -246,9 +248,11 @@ public class LibraryController {
         model.addObject("borrow", borrow);
         model.addObject("user", user);
         model.addObject("book", book);
+        model.addObject("now", Date.valueOf(LocalDate.now()));
+
+
 
         model.addObject("view", "loggedhome");
-       //todo:afficher les emprunts
 
 
         model.setViewName("index");

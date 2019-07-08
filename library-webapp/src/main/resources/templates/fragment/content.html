@@ -23,8 +23,8 @@
                     <div class="col-md-4" th:each="books, stat : ${book}"
                     >
                         <div class="card" style="width: 18rem;">
-                            <img src="https://pictures.abebooks.com/isbn/9782409006913-fr.jpg"
-                                 class="card-img-top" alt="test 1" height="200px">
+                            <img src="#" th:src="@{/img/__${books.getUrlImage()}__}" class="card-img-top" alt="test 1"
+                                 height="300px">
                             <div class="card-body">
                                 <!-- Nom Sport -->
                                 <h5 class="card-title" th:text="${books.getTitle()}">
@@ -49,6 +49,7 @@
                         <!-- _______________________FIN SPOT_________________________ -->
                     </div>
                 </div>
+                </br>
             </div>
             <!--______________ FIN TOPO _____________________________-->
         </div>
@@ -63,37 +64,50 @@
             <h1> Vos emprunts</h1>
         </div>
 
-            <div class="container">
-                <div class="row">
-                    <div th:each="borrows, stat : ${borrow}">
-                        <div class="col-md-4" th:each="books, stat : ${book}"
-                             th:if="${borrows.getIdBook()}==${books.getIdBook()}">
-                            <div class="card" style="width: 18rem;">
-                                <img src="https://pictures.abebooks.com/isbn/9782409006913-fr.jpg"
-                                     class="card-img-top" alt="test 1" height="200px">
-                                <div class="card-body">
-                                    <!-- Nom Sport -->
-                                    <h5 class="card-title" th:text="${books.getTitle()}">
-                                    </h5>
-                                    <h6 class="card-title">nb d'exemplaire restant(s) XX Temps restant
-                                    <td th:text="${books.getNbCopyAvailable()}"></td>
-                                    </h6>
-                                    <p class="card-text hide" th:text="${books.getSummary()}">
-                                    </p>
-                                    <td th:if="${!borrows.isExtended()}">
-                                        <form method="POST" th:action="@{/borrowed/(idborrow=${borrows.getIdBorrow()})}">
-                                            <button type="submit" name="submit" value="value"
-                                                    class="btn btn-success">Ralonger
-                                            </button>
-                                        </form>
-                                    </td>
+        <div class="container">
+            <div class="row">
+                <div th:each="borrows, stat : ${borrow}">
+                    <div class="col-md-4" th:each="books, stat : ${book}"
+                         th:if="${borrows.getIdBook()}==${books.getIdBook()}">
+                        <div class="card" style="width: 18rem;">
+                            <img src="#" th:src="@{/img/__${books.getUrlImage()}__}" class="card-img-top" alt="test 1"
+                                 height="300px">
+                            <div class="card-body">
+                                <!-- Nom Sport -->
+                                <h5 class="card-title" th:text="${books.getTitle()}">
+                                </h5>
+                                <h6 class="card-title">à rendre le :
+                                    <td th:text="${#dates.format(borrows.getReturnDate(),'dd-MM-YYYY')}"></td>
+                                </h6>
+
+<!-- 2019-08-05-->
+                                <div th:text="${now}"
+                                     class="row center alert alert-secondary" role="alert"> Vous êtes en retard
                                 </div>
-                             </div>
-                      </div>
-                  </div>
-                    <div th:if="${borrow.size()}==0" class="alert alert-primary" role="alert"> Aucun emprunt</div>
+                                <div th:if="${now.compareTo(borrows.getReturnDate())}>0"
+                                     class="row center alert alert-secondary" role="alert"> Vous êtes en retard
+                                </div>
+                                <!--
+                                <div th:if="(${borrows.getReturnDate().compareTo(${now})})>0"
+                                     class="row center alert alert-secondary" role="alert"> Vous êtes en retard
+                                </div>-->
+                                <p class="card-text hide" th:text="${books.getSummary()}">
+                                </p>
+                                <td th:if="${!borrows.isExtended()}">
+                                    <form method="POST" th:action="@{/borrowed/(idborrow=${borrows.getIdBorrow()})}">
+                                        <button type="submit" name="submit" value="value"
+                                                class="btn btn-success">Ralonger
+                                        </button>
+                                    </form>
+                                </td>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div th:if="${borrow.size()}==0" class="alert alert-primary" role="alert"> Aucun emprunt</div>
             </div>
+            </br>
+        </div>
     </main>
 </div>
 
@@ -290,8 +304,9 @@
 
                     <div class="col-md-4" th:each="books, stat : ${book}">
                         <div class="card" style="width: 18rem;">
-                            <img src="https://pictures.abebooks.com/isbn/9782409006913-fr.jpg"
-                                 class="card-img-top" alt="test 1" height="200px">
+
+                            <img src="#" th:src="@{/img/__${books.getUrlImage()}__}" class="card-img-top" alt="test 1"
+                                 height="300px">
                             <div class="card-body">
                                 <!-- Nom Sport -->
                                 <h5 class="card-title" th:text="${books.getTitle()}">

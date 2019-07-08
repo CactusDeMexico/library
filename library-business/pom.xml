@@ -15,8 +15,7 @@
   <!-- ===== General information ===== -->
   <name>library-business</name>
   <packaging>jar</packaging>
-  <!-- FIXME change it to the project's website -->
-  <url>http://localhost:8080/index</url>
+   <url>http://localhost:8080/index</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
